@@ -26,13 +26,50 @@ async function initClient() {
 
     client = new Client({ host, user, password, database });
 
-    await client.connect();
-    console.log(`Connected to postgres db at host ${HOST}`);
+    try {
+      await client.connect()
+      console.log(`Connected to postgres db at host ${HOST}`)
+      await createTables()
+    } catch (err) {
+      console.error("Unable to connect to the database:", err)
+    }
+  }
+}
 
-    await client.query(
-      "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255), username VARCHAR(255), email VARCHAR(255), password VARCHAR(255), role VARCHAR(50))"
-    );
-    console.log("Connected to db and created table users if it did not exist");
+async function createUsersTable() {
+  return client?.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255),
+      username VARCHAR(255),
+      email VARCHAR(255),
+      password VARCHAR(255),
+      role VARCHAR(50)
+    )
+  `)
+}
+
+async function createNotesTable() {
+  return client?.query(`
+    CREATE TABLE IF NOT EXISTS notes (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255),
+      content TEXT,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+    )
+  `)
+}
+
+// Centralized function to create all tables
+async function createTables() {
+  try {
+    await createUsersTable()
+    console.log("Created users table")
+    await createNotesTable()
+    console.log("Created notes table")
+    // Add calls to new table functions as needed
+  } catch (err) {
+    console.error("Error creating tables:", err)
   }
 }
 
