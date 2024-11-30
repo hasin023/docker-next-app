@@ -12,9 +12,9 @@ let client: Client | null = null;
 
 async function initClient() {
   if (!client) {
-    const host = HOST || "db"; // Default to the container name "db"
+    const host = HOST || "db";
     const user = USER || "postgres";
-    const password = PASSWORD || "pgadmin";
+    const password = PASSWORD || "example";
     const database = DB || "example";
 
     // Wait for the PostgreSQL container to be ready
