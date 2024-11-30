@@ -10,7 +10,7 @@ const poppins = Poppins({
 })
 export const metadata: Metadata = {
   title: "Docker NextJS",
-  description: "Dockerize NextJS App",
+  description: "Dockerize NextJS App trying to host on coolify",
 }
 
 export default function RootLayout({
