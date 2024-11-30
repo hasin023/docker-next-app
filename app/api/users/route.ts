@@ -1,9 +1,7 @@
-export const dynamic = 'force-dynamic'
-export const revalidate = 60
-
 import { NextRequest, NextResponse } from "next/server";
 import { initClient, teardownClient, getClient } from "@/persistence/postgres";
 
+// GET users
 export async function GET() {
     try {
         await initClient();
@@ -13,12 +11,13 @@ export async function GET() {
         return NextResponse.json(rows);
     } catch (err) {
         console.error("Error fetching users:", err);
-        return NextResponse.json({ error: "Error in fetching users" }, { status: 500 });
+        return NextResponse.json({ error: "Error fetching users" }, { status: 500 });
     } finally {
         await teardownClient();
     }
 }
 
+// POST a new user
 export async function POST(request: NextRequest) {
     try {
         await initClient();
@@ -33,7 +32,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "User added successfully" }, { status: 201 });
     } catch (err) {
         console.error("Error adding user:", err);
-        return NextResponse.json({ error: "Error in adding user" }, { status: 500 });
+        return NextResponse.json({ error: "Error adding user" }, { status: 500 });
     } finally {
         await teardownClient();
     }
